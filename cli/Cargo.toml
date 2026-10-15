@@ -1,0 +1,43 @@
+[package]
+name = "sapphire-timer"
+version = "0.1.0"
+edition.workspace = true
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+categories = ["command-line-utilities"]
+keywords = ["timer", "pomodoro", "cli", "mcp"]
+publish = false
+
+[lib]
+name = "sapphire_timer"
+path = "src/lib.rs"
+
+[[bin]]
+name = "sapphire-timer"
+path = "src/main.rs"
+
+[features]
+default = ["redb-store"]
+redb-store = [
+    "sapphire-timer-core/redb-store",
+    "sapphire-timer-mcp/redb-store",
+    "sapphire-framework/redb-store",
+]
+
+[dependencies]
+sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.1.0", default-features = false }
+sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.1.0", default-features = false }
+sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp"] }
+anyhow.workspace = true
+clap.workspace = true
+tokio = { workspace = true, features = ["rt-multi-thread", "macros", "signal", "time"] }
+tracing.workspace = true
+
+[dev-dependencies]
+async-trait = "0.1"
+rmcp = { workspace = true, features = ["client", "transport-streamable-http-client-reqwest", "transport-child-process"] }
+sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp", "keys"] }
+serde_json.workspace = true
+tempfile.workspace = true
+tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }

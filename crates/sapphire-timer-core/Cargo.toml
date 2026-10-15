@@ -1,0 +1,26 @@
+[package]
+name = "sapphire-timer-core"
+edition.workspace = true
+version = "0.1.0"
+description.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[features]
+default = ["redb-store"]
+redb-store = ["sapphire-workspace/redb-store"]
+
+[dependencies]
+chrono.workspace = true
+grain-id.workspace = true
+schemars.workspace = true
+sapphire-frontmatter.workspace = true
+sapphire-workspace.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["rt", "sync", "time"] }
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+tokio = { workspace = true, features = ["macros", "rt", "test-util"] }

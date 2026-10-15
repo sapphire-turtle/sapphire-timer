@@ -1,8 +1,13 @@
 # cargo-deny config. Run locally with `cargo deny check`.
 # Reference: https://embarkstudios.github.io/cargo-deny/
+#
+# The shared starting point for sapphire-turtle repositories
+# (sapphire-framework/ci/templates/deny.toml). Keep repository-specific entries
+# under `ignore` and `exceptions`, each with its reason.
 
 [graph]
-# Restrict the dep graph to the platforms we publish binaries for.
+# The platforms release binaries are published for. Drops UEFI/WASM-only
+# transitive dependencies such as `r-efi`, so their licenses need no allowing.
 targets = [
     "x86_64-unknown-linux-gnu",
     "aarch64-unknown-linux-gnu",
@@ -13,19 +18,16 @@ all-features = true
 
 [advisories]
 yanked = "warn"
-# Transitive `unmaintained` advisories we can't act on without replacing major
-# deps. Kept in sync with sapphire-journal's list, minus anything only its
-# desktop/GUI stack pulls in. Re-evaluate when upstreams move off these, or
-# when a *vulnerability* (not just unmaintained) advisory is filed.
+# Every ignore needs a `reason`, so the next contributor can tell whether it is
+# still load-bearing. Re-check them when the dependency they name moves.
 ignore = [
-    { id = "RUSTSEC-2025-0141", reason = "bincode 2.x is unmaintained but used transitively via lindera → lance (lancedb-store feature only); no safe upgrade exists." },
-    { id = "RUSTSEC-2021-0153", reason = "encoding crate is unmaintained but pulled in via lindera → lance (lancedb-store feature only)." },
-    { id = "RUSTSEC-2024-0436", reason = "paste is unmaintained but pulled in via many proc-macro consumers; no drop-in replacement." },
+    # Unmaintained, with no vulnerability and no safe upgrade.
+    { id = "RUSTSEC-2026-0192", reason = "ttf-parser is unmaintained (author-declared); reached through sapphire-framework-gui (desktop) and egui's text stack. The suggested alternative (skrifa) is a different font stack." },
 ]
 
 [licenses]
-# Permissive SPDX identifiers actually present in the resolved graph.
-# Re-survey with `cargo deny list --layout license` before widening.
+# Permissive SPDX identifiers. Re-survey with `cargo deny list --layout license`
+# before widening; prefer a per-crate entry under `exceptions` to adding here.
 allow = [
     "0BSD",
     "Apache-2.0",
@@ -39,27 +41,28 @@ allow = [
     "MIT",
     "MIT-0",
     "MPL-2.0",
-    "NCSA",
-    "OFL-1.1",
     "Unicode-3.0",
     "Unlicense",
     "Zlib",
 ]
 confidence-threshold = 0.93
+exceptions = [
+    # An application's own desktop app is GPL-3.0-or-later with an app store
+    # exception (ci/README.md). Scoped to that crate, so a GPL dependency
+    # cannot slip in unnoticed:
+    # { name = "<app>-desktop", allow = ["GPL-3.0-or-later"] },
+]
 
 [bans]
-# Duplicate-version warnings are too noisy in real Rust workspaces (every
-# transitively-pulled `syn`/`bitflags`/`hashbrown` version trips it).
+# Duplicate versions are too common in real workspaces to be worth a warning.
 multiple-versions = "allow"
 wildcards = "deny"
+# A `path` dependency without a version (a workspace crate's dev-dependency, or a
+# crate that is not published) is not a wildcard on the registry.
+allow-wildcard-paths = true
 
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-# sapphire-framework is not on crates.io yet, so the framework crates are a git
-# dependency for now. Drop this entry — and switch the manifests to version
-# dependencies — once they are published; sapphire-timer cannot be published to
-# crates.io until then.
-# See https://github.com/fluo10/sapphire-framework/issues/80
-allow-git = ["https://github.com/fluo10/sapphire-framework"]
+allow-git = []

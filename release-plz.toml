@@ -1,14 +1,28 @@
 [workspace]
+# Only the CLI makes the `v{version}` tag and GitHub release; the libraries are
+# published without tags (the sapphire-turtle convention).
 changelog_update = true
-git_release_enable = true
+dependencies_update = true
+publish = true
+release = true
+git_release_enable = false
+git_tag_enable = false
+# Publish only when a release PR is merged, not on every push to main that
+# carries an unpublished version.
+release_always = false
+pr_branch_prefix = "release-plz/"
+pr_labels = ["release"]
+
+# The CLI, the app server and the MCP server: one binary.
+[[package]]
+name = "sapphire-timer"
 git_tag_enable = true
+git_release_enable = true
+git_tag_name = "v{{ version }}"
+git_release_name = "v{{ version }}"
 
 [[package]]
 name = "sapphire-timer-core"
-git_tag_name = "core-v{{ version }}"
-git_release_name = "core-v{{ version }}"
 
 [[package]]
-name = "sapphire-timer-cli"
-git_tag_name = "cli-v{{ version }}"
-git_release_name = "cli-v{{ version }}"
+name = "sapphire-timer-mcp"
