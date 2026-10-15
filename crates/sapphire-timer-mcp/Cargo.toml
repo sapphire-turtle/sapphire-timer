@@ -1,0 +1,28 @@
+[package]
+name = "sapphire-timer-mcp"
+version = "0.1.0"
+edition.workspace = true
+description = "MCP for sapphire-timer: presets and logs on its app server, and a timer per client that it can subscribe to"
+license.workspace = true
+repository.workspace = true
+keywords = ["timer", "pomodoro", "mcp"]
+
+[features]
+default = ["redb-store"]
+redb-store = ["sapphire-timer-core/redb-store"]
+
+[dependencies]
+sapphire-timer-core = { path = "../sapphire-timer-core", version = "0.1.0", default-features = false }
+sapphire-framework = { workspace = true, features = ["ipc", "mcp", "keys"] }
+chrono.workspace = true
+grain-id.workspace = true
+http.workspace = true
+rmcp.workspace = true
+schemars.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["rt", "sync", "macros"] }
+tracing.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

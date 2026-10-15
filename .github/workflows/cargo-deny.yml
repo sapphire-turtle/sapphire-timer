@@ -1,5 +1,6 @@
 name: cargo-deny
 
+# A weekly run catches advisories filed against dependencies that did not change.
 on:
   pull_request:
     paths:
@@ -15,9 +16,4 @@ on:
 
 jobs:
   cargo-deny:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-      - uses: EmbarkStudios/cargo-deny-action@v2
-        with:
-          command: check
+    uses: sapphire-turtle/sapphire-framework/.github/workflows/shared-cargo-deny.yml@main

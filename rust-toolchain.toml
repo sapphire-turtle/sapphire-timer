@@ -1,0 +1,7 @@
+﻿# Pin the toolchain so CI and local checkouts agree: new stable releases land
+# new lints and formatting directly into a red CI run otherwise. Bump
+# deliberately, and fix whatever the new toolchain complains about in the same
+# commit. Matches sapphire-ledger / sapphire-journal / sapphire-framework.
+[toolchain]
+channel = "1.98.0"
+components = ["clippy", "rustfmt"]
