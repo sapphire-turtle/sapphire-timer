@@ -47,10 +47,14 @@ allow = [
 ]
 confidence-threshold = 0.93
 exceptions = [
-    # An application's own desktop app is GPL-3.0-or-later with an app store
-    # exception (ci/README.md). Scoped to that crate, so a GPL dependency
-    # cannot slip in unnoticed:
-    # { name = "<app>-desktop", allow = ["GPL-3.0-or-later"] },
+    # Our own desktop app is GPL-3.0-or-later with an app store exception
+    # (desktop/LICENSE.App-Store-Exception). Scoped to it, so a GPL dependency
+    # cannot slip in unnoticed.
+    { name = "sapphire-timer-desktop", allow = ["GPL-3.0-or-later"] },
+    # egui's fallback UI font is under the OFL and the Ubuntu Font Licence: they
+    # govern the typefaces it embeds, not code, so they are scoped to this crate
+    # rather than allowed for every dependency.
+    { name = "epaint_default_fonts", allow = ["OFL-1.1", "Ubuntu-font-1.0"] },
 ]
 
 [bans]

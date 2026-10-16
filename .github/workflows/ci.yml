@@ -7,5 +7,9 @@ jobs:
   ci:
     uses: sapphire-turtle/sapphire-framework/.github/workflows/shared-rust-ci.yml@main
     with:
-      # cmake is for aws-lc-sys.
-      linux-packages: pkg-config cmake
+      # sapphire-timer-desktop pulls eframe -> winit, which needs xkbcommon
+      # plus the X11 and Wayland client libraries even to build. cmake is for
+      # aws-lc-sys.
+      linux-packages: >-
+        pkg-config cmake libxkbcommon-dev libwayland-dev libx11-dev
+        libxcursor-dev libxi-dev libxrandr-dev
