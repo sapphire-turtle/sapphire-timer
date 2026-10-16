@@ -1,0 +1,13 @@
+[package]
+name = "sapphire-timer-desktop"
+version = "0.1.0"
+edition.workspace = true
+description = "Desktop GUI for sapphire-timer"
+license-file = "LICENSE"
+repository.workspace = true
+publish = false
+
+[dependencies]
+# `eframe`: `gui::app::run` starts the window, and `gui::{eframe, egui}` are the
+# versions it renders with.
+sapphire-framework = { workspace = true, features = ["eframe"] }
