@@ -5,6 +5,8 @@ version = "0.1.0"
 description.workspace = true
 license.workspace = true
 repository.workspace = true
+categories = ["filesystem", "data-structures"]
+keywords = ["timer", "pomodoro", "preset", "plain-text"]
 
 [features]
 default = ["redb-store"]
