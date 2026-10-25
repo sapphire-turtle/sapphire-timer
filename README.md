@@ -29,6 +29,8 @@ One task, no context switching.
   - over stdio (`sapphire-timer mcp`), the process that launched the subcommand;
   - over HTTP (`/mcp` on the app server), each external device, identified by its bearer token.
 
+> **Works with any MCP client.** AI integration is a standard MCP server, so sapphire-timer is not tied to [sapphire-agent](https://github.com/sapphire-turtle/sapphire-agent) despite the shared name — any AI harness that can act as an MCP client (Claude Code, Claude Desktop, …) can use it.
+
 ## MCP
 
 Tools: `timer_start`, `timer_start_preset`, `timer_cancel`, `timer_status`, `preset_add|get|update|delete|list`,
