@@ -54,7 +54,9 @@ sapphire-timer mcp                    # MCP on stdio, for an agent to launch
 `sapphire-timer-desktop` (`desktop/`) is a window onto the same server: the framework's Settings
 (workspace, sync, workgroup) and, for now, a placeholder Timers screen.
 
-`/mcp` over HTTP is off unless `server.toml` says `[mcp] http = true`; it listens on `127.0.0.1:3175` by default.
+`/mcp` over HTTP is off unless the config directory's `config.toml` says `[http.mcp] enabled = true`
+(`sapphire-timer config set http.mcp.enabled=true --restart`); it listens on `127.0.0.1:3175` by default.
+A `server.toml` from an older version is moved into `config.toml` on the first start.
 
 ## License
 

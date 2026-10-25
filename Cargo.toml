@@ -23,22 +23,24 @@ grain-id = { version = "0.16", features = ["serde", "schemars"] }
 # that is where the framework's auth layer leaves the external device.
 http = "1"
 # The MCP macros name `rmcp` directly, so it is the version sapphire-framework
-# builds on (`sapphire_framework::mcp::rmcp`): 3.5 in sapphire-framework 0.21.
+# builds on (`sapphire_framework::mcp::rmcp`): 3.5 in sapphire-framework 0.22.
 rmcp = { version = "3.5", default-features = false, features = ["server", "macros"] }
 # The facade: `server` is the app server (AppServer, FrameworkCommand,
 # SyncRuntime), `ipc` its transport, `mcp` the shared MCP tools with the `mcp`
 # subcommand and `/mcp` over HTTP, `keys` the external device an HTTP request
 # came from. `redb-store` must be named: with default features off the
 # framework's persistent store silently falls back to in-memory otherwise.
-sapphire-framework = { version = "0.21.0", default-features = false }
-sapphire-frontmatter = { package = "sapphire-framework-frontmatter", version = "0.21.0" }
-sapphire-workspace = { package = "sapphire-framework-workspace", version = "0.21.0", default-features = false }
+sapphire-framework = { version = "0.22.0", default-features = false }
+sapphire-frontmatter = { package = "sapphire-framework-frontmatter", version = "0.22.0" }
+sapphire-workspace = { package = "sapphire-framework-workspace", version = "0.22.0", default-features = false }
 schemars = { version = "1.0", features = ["chrono04"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tempfile = "3"
 thiserror = "2"
 tokio = { version = "1" }
+# The CLI reads the device's `config.toml` for its own check of `[http]`.
+toml = "1.1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
