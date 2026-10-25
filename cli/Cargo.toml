@@ -32,6 +32,7 @@ sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp"] }
 anyhow.workspace = true
 clap.workspace = true
 tokio = { workspace = true, features = ["rt-multi-thread", "macros", "signal", "time"] }
+toml.workspace = true
 tracing.workspace = true
 
 [dev-dependencies]
