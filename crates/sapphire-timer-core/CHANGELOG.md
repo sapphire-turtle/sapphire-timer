@@ -1,0 +1,18 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.0](https://github.com/sapphire-turtle/sapphire-timer/releases/tag/sapphire-timer-core-v0.1.0) - 2026-10-25
+
+### Added
+
+- [**breaking**] rebuild sapphire-timer on sapphire-framework 0.20, with timers over MCP
+
+### Other
+
+- release with release-plz
