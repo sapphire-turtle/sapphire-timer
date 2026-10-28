@@ -5143,7 +5143,16 @@ dependencies = [
 name = "sapphire-timer-desktop"
 version = "0.1.0"
 dependencies = [
+ "chrono",
+ "grain-id",
  "sapphire-framework",
+ "sapphire-timer",
+ "sapphire-timer-core",
+ "sapphire-timer-mcp",
+ "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
 ]
 
 [[package]]

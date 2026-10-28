@@ -5,12 +5,19 @@
 //!
 //! A pure client: it talks to the service-managed `sapphire-timer serve` and
 //! `sapphire-bridge` over IPC and never starts either itself. Closing the
-//! window stops nothing. The Timers screen is a placeholder for now: the
-//! timers run from the CLI and over MCP.
+//! window stops nothing. The Timers screen lists the presets and, in the side
+//! pane, the logs of the one picked; the timers still run from the CLI and
+//! over MCP.
+
+mod client;
+mod timers;
 
 use sapphire_framework::gui::app::{AppOptions, AppSetup};
 use sapphire_framework::gui::client::AppIdentity;
 use sapphire_framework::gui::{Destination, Settings, Shell, ShellApp, Side, eframe, egui};
+
+use crate::client::TimerClient;
+use crate::timers::TimersView;
 
 const APP: AppIdentity = AppIdentity {
     app_name: "sapphire-timer",
@@ -29,35 +36,27 @@ struct App {
 }
 
 /// What the shell draws: the screens and the side pane.
-struct Screens;
+struct Screens {
+    timers: TimersView,
+}
 
 impl eframe::App for App {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        self.screens.timers.poll(ui.ctx());
         self.shell.show(ui, &mut self.screens);
     }
 }
 
 impl ShellApp<Screen> for Screens {
-    fn screen_ui(&mut self, ui: &mut egui::Ui, screen: Screen, _side: &mut Side) {
+    fn screen_ui(&mut self, ui: &mut egui::Ui, screen: Screen, side: &mut Side) {
         match screen {
-            Screen::Timers => timers_ui(ui),
+            Screen::Timers => self.timers.ui(ui, side),
         }
     }
 
     fn side_ui(&mut self, ui: &mut egui::Ui, _screen: Option<Screen>, _side: &mut Side) {
-        ui.weak("Not here yet.");
+        self.timers.side_ui(ui);
     }
-}
-
-/// The Timers screen, until it has the timers.
-fn timers_ui(ui: &mut egui::Ui) {
-    egui::CentralPanel::default().show(ui, |ui| {
-        ui.vertical_centered(|ui| {
-            ui.add_space(ui.available_height() / 3.0);
-            ui.heading("Timers");
-            ui.label("Not here yet: run the timers with `sapphire-timer` or over MCP.");
-        });
-    });
 }
 
 fn main() -> eframe::Result<()> {
@@ -72,9 +71,12 @@ fn main() -> eframe::Result<()> {
                 )],
                 Settings::new(setup.framework),
             );
+            let client = TimerClient::new(APP.app_name, APP.version, setup.endpoints.app);
             Box::new(App {
                 shell,
-                screens: Screens,
+                screens: Screens {
+                    timers: TimersView::new(setup.runtime, client, setup.repaint),
+                },
             })
         },
     )
