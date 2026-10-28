@@ -10,7 +10,7 @@
 
 use sapphire_framework::gui::app::{AppOptions, AppSetup};
 use sapphire_framework::gui::client::AppIdentity;
-use sapphire_framework::gui::{Destination, Settings, Shell, eframe, egui};
+use sapphire_framework::gui::{Destination, Settings, Shell, ShellApp, Side, eframe, egui};
 
 const APP: AppIdentity = AppIdentity {
     app_name: "sapphire-timer",
@@ -25,13 +25,27 @@ enum Screen {
 
 struct App {
     shell: Shell<Screen>,
+    screens: Screens,
 }
+
+/// What the shell draws: the screens and the side pane.
+struct Screens;
 
 impl eframe::App for App {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        self.shell.ui(ui, |ui, screen| match screen {
+        self.shell.show(ui, &mut self.screens);
+    }
+}
+
+impl ShellApp<Screen> for Screens {
+    fn screen_ui(&mut self, ui: &mut egui::Ui, screen: Screen, _side: &mut Side) {
+        match screen {
             Screen::Timers => timers_ui(ui),
-        });
+        }
+    }
+
+    fn side_ui(&mut self, ui: &mut egui::Ui, _screen: Option<Screen>, _side: &mut Side) {
+        ui.weak("Not here yet.");
     }
 }
 
@@ -58,7 +72,10 @@ fn main() -> eframe::Result<()> {
                 )],
                 Settings::new(setup.framework),
             );
-            Box::new(App { shell })
+            Box::new(App {
+                shell,
+                screens: Screens,
+            })
         },
     )
 }
