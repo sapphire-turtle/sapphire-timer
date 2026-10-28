@@ -19,8 +19,8 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 
 use sapphire_framework::server::{
-    AppFiles, AppServer, AppSettings, FieldError, SERVER_CONFIG_FILE, ServerConfig, SettingDef,
-    Settings, Staged, StatusRow, WorkspaceHost,
+    AppFiles, AppServer, AppSettings, FieldError, ReleaseSource, SERVER_CONFIG_FILE, ServerConfig,
+    SettingDef, Settings, Staged, StatusRow, WorkspaceHost,
 };
 use sapphire_timer_core::{TIMER_CTX, Timers};
 
@@ -37,6 +37,7 @@ pub const DEFAULT_HTTP_ADDR: &str = "127.0.0.1:3175";
 /// [`build`] adds the bridge; a test runs this as it is.
 pub fn server() -> AppServer {
     let server = AppServer::new(&TIMER_CTX, VERSION)
+        .releases(release_source())
         .app_api(sapphire_timer_mcp::APP_API)
         .mcp(sapphire_timer_mcp::service())
         .http_listen(default_http_addr());
@@ -186,4 +187,12 @@ pub fn build(settings: &Settings) -> AppServer {
             value: mcp_row.clone(),
         }]
     }))
+}
+
+/// Where the app's releases are published: what `update` installs from, and where the
+/// server looks once a day for a newer one.
+fn release_source() -> ReleaseSource {
+    ReleaseSource::github("sapphire-turtle", "sapphire-timer")
+        .asset("sapphire-timer")
+        .cargo_crate("sapphire-timer")
 }
