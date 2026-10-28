@@ -10,7 +10,22 @@ publish = false
 [dependencies]
 # `eframe`: `gui::app::run` starts the window, and `gui::{eframe, egui}` are the
 # versions it renders with.
-sapphire-framework = { workspace = true, features = ["eframe"] }
+sapphire-framework = { workspace = true, features = ["eframe", "ipc"] }
+# The record types the server's answers deserialize into, and the methods'
+# parameters and names. No store: the desktop reads nothing from disk.
+sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.1.0", default-features = false }
+sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.1.0", default-features = false }
+chrono.workspace = true
+grain-id.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["rt", "sync"] }
+
+[dev-dependencies]
+# The real server, for the client test: `serve::server()`.
+sapphire-timer = { path = "../cli", default-features = false }
+tempfile.workspace = true
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time"] }
 
 # `cargo binstall --git https://github.com/sapphire-turtle/sapphire-timer sapphire-timer-desktop`
 # downloads the release file instead of building it (this crate is not on crates.io), following
