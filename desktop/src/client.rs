@@ -140,7 +140,7 @@ mod tests {
             "got: {err}"
         );
 
-        let server = sapphire_timer::serve::server().endpoint(endpoint.clone());
+        let server = sapphire_timer_server::server().endpoint(endpoint.clone());
         let task = tokio::spawn(async move { server.run().await.unwrap() });
         let deadline = tokio::time::Instant::now() + Duration::from_secs(10);
         while !ipc::probe(&endpoint).await.unwrap() {

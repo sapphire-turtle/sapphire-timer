@@ -1,8 +1,8 @@
-//! The one binary's command line: the framework's verbs, flat at the top
+//! `sapphire-timer`'s command line: the framework's verbs, flat at the top
 //! level.
 
 use clap::Parser as _;
-use sapphire_timer::cli::{Cli, Command, FrameworkCommand};
+use sapphire_timer_cli::cli::{Cli, Command, FrameworkCommand};
 
 fn parse(args: &[&str]) -> Cli {
     Cli::try_parse_from(std::iter::once("sapphire-timer").chain(args.iter().copied()))

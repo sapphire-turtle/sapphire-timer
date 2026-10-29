@@ -9,7 +9,7 @@ Thank you for helping with sapphire-timer. A couple of conventions keep the repo
 
 ## Repository layout
 
-- **Binary crates** live in a directory named after the short name (`cli/`, `desktop/`, `server/`) directly under the repo root.
+- **Binary crates** live in a directory named after the short name (`headless/`, `desktop/`) directly under the repo root.
 - **Library crates** live under `crates/`, in a directory named after the full crate name.
 - Non-crate directories (docs, editor extensions, etc.) stay at the repo root.
 

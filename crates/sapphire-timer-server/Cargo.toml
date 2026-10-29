@@ -1,0 +1,24 @@
+[package]
+name = "sapphire-timer-server"
+# Released together with the editions that run it (release-plz.toml).
+version = "0.2.0"
+edition.workspace = true
+description = "sapphire-timer's app server: the one process that reads and writes the presets and logs, with its sync and MCP methods"
+license.workspace = true
+repository.workspace = true
+keywords = ["timer", "pomodoro", "mcp"]
+
+[features]
+default = ["redb-store"]
+redb-store = [
+    "sapphire-timer-core/redb-store",
+    "sapphire-timer-mcp/redb-store",
+    "sapphire-framework/redb-store",
+]
+
+[dependencies]
+sapphire-timer-core = { path = "../sapphire-timer-core", version = "0.1.0", default-features = false }
+sapphire-timer-mcp = { path = "../sapphire-timer-mcp", version = "0.1.0", default-features = false }
+sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp"] }
+anyhow.workspace = true
+toml.workspace = true

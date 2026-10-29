@@ -5106,21 +5106,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "sapphire-timer"
-version = "0.1.0"
+name = "sapphire-timer-cli"
+version = "0.2.0"
 dependencies = [
  "anyhow",
- "async-trait",
  "clap",
- "rmcp",
  "sapphire-framework",
  "sapphire-timer-core",
- "sapphire-timer-mcp",
- "serde_json",
- "tempfile",
+ "sapphire-timer-server",
  "tokio",
- "toml",
- "tracing",
 ]
 
 [[package]]
@@ -5141,15 +5135,36 @@ dependencies = [
 
 [[package]]
 name = "sapphire-timer-desktop"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
+ "anyhow",
  "chrono",
+ "clap",
  "grain-id",
  "sapphire-framework",
- "sapphire-timer",
+ "sapphire-timer-cli",
  "sapphire-timer-core",
  "sapphire-timer-mcp",
+ "sapphire-timer-server",
  "serde",
+ "serde_json",
+ "tempfile",
+ "tokio",
+]
+
+[[package]]
+name = "sapphire-timer-headless"
+version = "0.2.0"
+dependencies = [
+ "anyhow",
+ "async-trait",
+ "clap",
+ "rmcp",
+ "sapphire-framework",
+ "sapphire-timer-cli",
+ "sapphire-timer-core",
+ "sapphire-timer-mcp",
+ "sapphire-timer-server",
  "serde_json",
  "tempfile",
  "tokio",
@@ -5171,6 +5186,17 @@ dependencies = [
  "tempfile",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "sapphire-timer-server"
+version = "0.2.0"
+dependencies = [
+ "anyhow",
+ "sapphire-framework",
+ "sapphire-timer-core",
+ "sapphire-timer-mcp",
+ "toml",
 ]
 
 [[package]]

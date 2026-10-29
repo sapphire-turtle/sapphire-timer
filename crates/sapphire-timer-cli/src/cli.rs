@@ -2,7 +2,8 @@ use clap::{Parser, Subcommand};
 
 pub use sapphire_framework::server::FrameworkCommand;
 
-/// The command line of the one binary this app ships.
+/// The command line both editions run: the headless edition's `sapphire-timer`,
+/// and the desktop app's when it is given a subcommand.
 ///
 /// The framework's verbs sit at the top level, where the timer's own verbs
 /// will join them. A bare invocation prints the help; the service manager

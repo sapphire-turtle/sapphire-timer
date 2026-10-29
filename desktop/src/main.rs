@@ -1,20 +1,27 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 //! sapphire-timer's desktop app: its screens on the framework's rail, and the
-//! framework's Settings at the rail's foot.
+//! framework's Settings at the rail's foot — and, given a subcommand, the CLI.
 //!
-//! A pure client: it talks to the service-managed `sapphire-timer serve` and
-//! `sapphire-bridge` over IPC and never starts either itself. Closing the
-//! window stops nothing. The Timers screen lists the presets and, in the side
-//! pane, the logs of the one picked; the timers still run from the CLI and
-//! over MCP.
+//! This one binary is a superset of the CLI's: bare, it opens the window;
+//! with `serve`, `mcp`, `status`, … it runs the CLI's own code
+//! (`sapphire_timer_cli::run`), so the service manager and MCP clients can
+//! start it as they start `sapphire-timer`.
+//!
+//! The window is a pure client: it talks to the service-managed
+//! `sapphire-timer serve` and `sapphire-bridge` over IPC and never starts
+//! either itself. Closing the window stops nothing. The Timers screen lists
+//! the presets and, in the side pane, the logs of the one picked; the timers
+//! still run from the CLI and over MCP.
 
 mod client;
 mod timers;
 
+use clap::Parser;
 use sapphire_framework::gui::app::{AppOptions, AppSetup};
 use sapphire_framework::gui::client::AppIdentity;
 use sapphire_framework::gui::{Destination, Settings, Shell, ShellApp, Side, eframe, egui};
+use sapphire_timer_cli::cli::Command;
 
 use crate::client::TimerClient;
 use crate::timers::TimersView;
@@ -59,7 +66,26 @@ impl ShellApp<Screen> for Screens {
     }
 }
 
-fn main() -> eframe::Result<()> {
+/// The CLI's command line, with the subcommand optional: none opens the window.
+#[derive(Parser)]
+#[command(
+    name = "sapphire-timer",
+    about = "Pomodoro-style timer with presets and time logs: the desktop app, or the CLI's commands",
+    version
+)]
+struct DesktopCli {
+    #[command(subcommand)]
+    command: Option<Command>,
+}
+
+fn main() -> anyhow::Result<()> {
+    match DesktopCli::parse().command {
+        Some(command) => sapphire_timer_cli::run(command),
+        None => Ok(window()?),
+    }
+}
+
+fn window() -> eframe::Result<()> {
     sapphire_framework::gui::app::run(
         AppOptions::new(APP, "Sapphire Timer"),
         |setup: AppSetup<'_>| {

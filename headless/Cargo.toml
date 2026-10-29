@@ -1,6 +1,9 @@
 [package]
-name = "sapphire-timer"
-version = "0.1.0"
+# The edition without the GUI, for headless hosts. Its binary is `sapphire-timer`,
+# the one command both editions put on PATH; the desktop app is
+# `sapphire-timer-desktop`, and runs the same commands.
+name = "sapphire-timer-headless"
+version = "0.2.0"
 edition.workspace = true
 description.workspace = true
 license.workspace = true
@@ -9,33 +12,24 @@ readme = "../README.md"
 categories = ["command-line-utilities"]
 keywords = ["timer", "pomodoro", "cli", "mcp"]
 
-[lib]
-name = "sapphire_timer"
-path = "src/lib.rs"
-
 [[bin]]
 name = "sapphire-timer"
 path = "src/main.rs"
 
 [features]
 default = ["redb-store"]
-redb-store = [
-    "sapphire-timer-core/redb-store",
-    "sapphire-timer-mcp/redb-store",
-    "sapphire-framework/redb-store",
-]
+redb-store = ["sapphire-timer-cli/redb-store"]
 
 [dependencies]
-sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.1.0", default-features = false }
-sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.1.0", default-features = false }
-sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp"] }
+sapphire-timer-cli = { path = "../crates/sapphire-timer-cli", version = "0.2.0", default-features = false }
 anyhow.workspace = true
 clap.workspace = true
-tokio = { workspace = true, features = ["rt-multi-thread", "macros", "signal", "time"] }
-toml.workspace = true
-tracing.workspace = true
 
 [dev-dependencies]
+# The tests run the `sapphire-timer` binary beside the real server.
+sapphire-timer-core = { path = "../crates/sapphire-timer-core", default-features = false }
+sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", default-features = false }
+sapphire-timer-server = { path = "../crates/sapphire-timer-server", default-features = false }
 async-trait = "0.1"
 rmcp = { workspace = true, features = ["client", "transport-streamable-http-client-reqwest", "transport-child-process"] }
 sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp", "keys"] }
@@ -43,10 +37,12 @@ serde_json.workspace = true
 tempfile.workspace = true
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 
-# `cargo binstall sapphire-timer` downloads the release file instead of building it, following
-# sapphire-turtle/.github's README.md#conventions: the files are bare binaries named
-# `<binary>-<os>-<arch>`, so each release platform names its own. quick-install is a third
-# party's build: only this repository's files, or a build from source, are installed.
+# `cargo binstall sapphire-timer-headless` downloads the release file instead of building
+# it, following sapphire-turtle/.github's README.md#conventions: the files are bare binaries
+# named `<crate>-<os>-<arch>` — `sapphire-timer-headless-…`, beside the desktop app's
+# `sapphire-timer-desktop-…` — so each release platform names its own; binstall installs
+# it as the `sapphire-timer` binary. quick-install is a third party's build: only this
+# repository's files, or a build from source, are installed.
 [package.metadata.binstall]
 pkg-fmt = "bin"
 disabled-strategies = ["quick-install"]
