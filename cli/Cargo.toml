@@ -44,7 +44,7 @@ tempfile.workspace = true
 tokio = { workspace = true, features = ["macros", "rt-multi-thread"] }
 
 # `cargo binstall sapphire-timer` downloads the release file instead of building it, following
-# sapphire-framework's ci/README.md#conventions: the files are bare binaries named
+# sapphire-turtle/.github's README.md#conventions: the files are bare binaries named
 # `<binary>-<os>-<arch>`, so each release platform names its own. quick-install is a third
 # party's build: only this repository's files, or a build from source, are installed.
 [package.metadata.binstall]
