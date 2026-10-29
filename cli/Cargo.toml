@@ -1,6 +1,6 @@
 [package]
 name = "sapphire-timer"
-version = "0.1.0"
+version = "0.1.1"
 edition.workspace = true
 description.workspace = true
 license.workspace = true
@@ -26,8 +26,8 @@ redb-store = [
 ]
 
 [dependencies]
-sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.1.0", default-features = false }
-sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.1.0", default-features = false }
+sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.1.1", default-features = false }
+sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.1.1", default-features = false }
 sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp"] }
 anyhow.workspace = true
 clap.workspace = true
