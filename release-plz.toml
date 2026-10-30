@@ -1,7 +1,7 @@
 [workspace]
-# Only the CLI makes the `v{version}` tag and GitHub release, and the desktop app
-# its `desktop-v{version}` ones; the libraries are published without tags (the
-# sapphire-turtle convention).
+# The two editions — the headless one and the desktop app — share one version and
+# one `v{version}` tag and GitHub release, which the headless one makes; the
+# libraries are published without tags (the sapphire-turtle convention).
 changelog_update = true
 dependencies_update = true
 publish = true
@@ -14,13 +14,25 @@ release_always = false
 pr_branch_prefix = "release-plz/"
 pr_labels = ["release"]
 
-# The CLI, the app server and the MCP server: one binary.
+# The headless edition: the `sapphire-timer` binary without the GUI. A new crate
+# at 0.2.0; 0.1.0 was published as `sapphire-timer`.
 [[package]]
-name = "sapphire-timer"
+name = "sapphire-timer-headless"
+version_group = "app"
 git_tag_enable = true
 git_release_enable = true
 git_tag_name = "v{{ version }}"
 git_release_name = "v{{ version }}"
+
+# The command line both editions run, and the app server it starts. They move
+# with the editions: nothing outside this workspace builds on them.
+[[package]]
+name = "sapphire-timer-cli"
+version_group = "app"
+
+[[package]]
+name = "sapphire-timer-server"
+version_group = "app"
 
 [[package]]
 name = "sapphire-timer-core"
@@ -28,16 +40,17 @@ name = "sapphire-timer-core"
 [[package]]
 name = "sapphire-timer-mcp"
 
-# GitHub-release-only binary crate. It is not published, so its versions live in
-# its git tags; `git_only = true` is load-bearing: release-plz silently skips a
-# crate whose Cargo.toml has `publish = false` unless it is set (`release = true`
-# alone no longer does it).
+# The desktop app, which runs the CLI too. It is not published, so its versions
+# live in the shared `v{version}` tags the headless edition makes; `git_only = true` is
+# load-bearing: release-plz silently skips a crate whose Cargo.toml has
+# `publish = false` unless it is set (`release = true` alone no longer does it).
 [[package]]
 name = "sapphire-timer-desktop"
+version_group = "app"
 git_only = true
 # Overrides the workspace's `publish = true`, which `git_only` refuses.
 publish = false
-git_tag_enable = true
-git_release_enable = true
-git_tag_name = "desktop-v{{ version }}"
-git_release_name = "desktop-v{{ version }}"
+# The tag its version is read from; the headless edition makes it.
+git_tag_name = "v{{ version }}"
+git_tag_enable = false
+git_release_enable = false

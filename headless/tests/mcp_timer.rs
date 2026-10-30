@@ -29,7 +29,6 @@ use sapphire_framework::backend::protocol as proto;
 use sapphire_framework::ipc::{self, ClientInfo, Endpoint};
 use sapphire_framework::keys::{AuthConfig, Authenticated, Verdict, Verifier};
 use sapphire_framework::server::{HttpConfig, HttpMcpConfig, ServerConfig};
-use sapphire_timer::serve;
 use sapphire_timer_core::{AppKind, TIMER_CTX};
 use sapphire_timer_mcp::ACTIVE_TIMER_URI;
 use serde_json::{Value, json};
@@ -180,7 +179,7 @@ async fn each_client_hears_its_own_timer_and_every_run_is_logged() {
         .unwrap()
         .port();
     let addr: SocketAddr = format!("127.0.0.1:{port}").parse().unwrap();
-    let server = serve::server()
+    let server = sapphire_timer_server::server()
         .config(ServerConfig {
             http: HttpConfig {
                 listen: Some(addr),

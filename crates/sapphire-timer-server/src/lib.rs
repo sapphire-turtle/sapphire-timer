@@ -1,4 +1,7 @@
-//! The app server: what `sapphire-timer serve` runs.
+//! sapphire-timer's app server: what `sapphire-timer serve` runs, in either
+//! edition. A library, not a binary of its own: the server is set up with the
+//! same `sapphire-timer` command that runs it (`sapphire-timer-cli`), so
+//! there is no separate server command to tell from the client's.
 //!
 //! The framework's [`AppServer`] owns the IPC socket, the current workspace
 //! (`workspace init|select|sync|show|move|remove`), signals and the log
