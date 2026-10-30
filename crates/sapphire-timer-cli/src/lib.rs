@@ -16,11 +16,13 @@ use anyhow::Result;
 use sapphire_timer_core::{AppKind, TIMER_CTX};
 use sapphire_timer_server::{self as serve, TimerSettings};
 
+pub use sapphire_timer_server::Edition;
+
 use crate::cli::{Command, FrameworkCommand};
 
-/// Run one command, exiting the process with its code when a framework verb
-/// fails with one.
-pub fn run(command: Command) -> Result<()> {
+/// Run one command as `edition`, exiting the process with its code when a
+/// framework verb fails with one.
+pub fn run(command: Command, edition: Edition) -> Result<()> {
     match command {
         // `serve` is what the service manager starts; the framework restarts
         // it in place on `server.restart`. `mcp` among the rest: its stdout is
@@ -39,7 +41,7 @@ pub fn run(command: Command) -> Result<()> {
             let code = runtime()?.block_on(command.dispatch(
                 &TIMER_CTX,
                 TimerSettings,
-                serve::build,
+                |settings| serve::build(settings, edition),
                 serve::VERSION,
             ))?;
             if code != 0 {

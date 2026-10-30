@@ -22,8 +22,8 @@ use std::net::SocketAddr;
 use std::sync::Arc;
 
 use sapphire_framework::server::{
-    AppFiles, AppServer, AppSettings, FieldError, SERVER_CONFIG_FILE, ServerConfig, SettingDef,
-    Settings, Staged, StatusRow, WorkspaceHost,
+    AppFiles, AppServer, AppSettings, FieldError, ReleaseSource, SERVER_CONFIG_FILE, ServerConfig,
+    SettingDef, Settings, Staged, StatusRow, WorkspaceHost,
 };
 use sapphire_timer_core::{TIMER_CTX, Timers};
 
@@ -33,6 +33,32 @@ pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 /// Where the HTTP listener binds unless `config.toml`'s `[http] listen` says
 /// otherwise: loopback, on the port after sapphire-tally's.
 pub const DEFAULT_HTTP_ADDR: &str = "127.0.0.1:3175";
+
+/// Which edition runs the server: the release file `update` installs is the
+/// edition's own.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Edition {
+    /// `sapphire-timer-headless`, the command line alone.
+    Headless,
+    /// `sapphire-timer-desktop`, the desktop app.
+    Desktop,
+}
+
+impl Edition {
+    /// Where the edition's releases are published: what `update` installs
+    /// from, and where the server looks once a day for a newer one. Both are
+    /// in the shared `v{version}` release (release-binaries.yml), as
+    /// `<crate>-<os>-<arch>`; only the headless edition is on crates.io.
+    pub fn releases(self) -> ReleaseSource {
+        let source = ReleaseSource::github("sapphire-turtle", "sapphire-timer");
+        match self {
+            Edition::Headless => source
+                .asset("sapphire-timer-headless")
+                .cargo_crate("sapphire-timer-headless"),
+            Edition::Desktop => source.asset("sapphire-timer-desktop"),
+        }
+    }
+}
 
 /// The timer's server, without sync: the framework's server with the timer's
 /// methods, its MCP tools, and its HTTP port.
@@ -158,12 +184,12 @@ pub fn check_device_config(text: &str) -> anyhow::Result<()> {
 }
 
 /// The server `serve` runs, from the settings it starts with: [`server`] with
-/// sync and the timer's status row.
+/// `edition`'s releases, sync and the timer's status row.
 ///
 /// The framework's other verbs build it too — `service` for its spec, `mcp`
 /// for its tools — but only `serve` runs it, so nothing here reaches the
 /// bridge until then.
-pub fn build(settings: &Settings) -> AppServer {
+pub fn build(settings: &Settings, edition: Edition) -> AppServer {
     // The framework reads the same settings for the listener; this read is
     // for the status row. A value it cannot take stops the start there.
     let config = ServerConfig::from_settings(settings).unwrap_or_default();
@@ -180,6 +206,7 @@ pub fn build(settings: &Settings) -> AppServer {
     // version, say — stops the start, in `run`. Building the runtime fails
     // only when the OS cannot name this executable.
     let server = server()
+        .releases(edition.releases())
         .sync_via_bridge()
         .expect("the running executable's path is known");
 
