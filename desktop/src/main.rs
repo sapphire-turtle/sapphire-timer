@@ -80,7 +80,7 @@ struct DesktopCli {
 
 fn main() -> anyhow::Result<()> {
     match DesktopCli::parse().command {
-        Some(command) => sapphire_timer_cli::run(command),
+        Some(command) => sapphire_timer_cli::run(command, sapphire_timer_cli::Edition::Desktop),
         None => Ok(window()?),
     }
 }
