@@ -1,3 +1,5 @@
+<img src="docs/icon.svg" alt="" width="72" height="72">
+
 # sapphire-timer
 
 A preset-based timer built on [sapphire-framework](https://github.com/sapphire-turtle/sapphire-framework) —

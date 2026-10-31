@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <mask id="glyph">
+    <path d="M12 2 20.66 7v10L12 22l-8.66-5V7Z" fill="#fff" stroke="#fff"/>
+    <g stroke="#000" transform="translate(12 12) scale(1.15) translate(-12 -12)" stroke-width="1.74">
+      <path d="M8.5 7h7"/><path d="M8.5 17h7"/><path d="M9.5 7v1.5c0 1.5 2.5 2.5 2.5 3.5s-2.5 2-2.5 3.5V17"/><path d="M14.5 7v1.5c0 1.5-2.5 2.5-2.5 3.5s2.5 2 2.5 3.5V17"/>
+    </g>
+  </mask>
+  <rect width="24" height="24" fill="currentColor" mask="url(#glyph)"/>
+</svg>
