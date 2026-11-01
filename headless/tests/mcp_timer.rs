@@ -2,8 +2,8 @@
 //!
 //! What this pins is the timer's half of the wiring:
 //!
-//! - over HTTP, each external device has a timer of its own — one device's
-//!   run is invisible to another;
+//! - over HTTP, each API key has a timer of its own — one key's
+//!   run is invisible to another, and a read-only key reads but starts none;
 //! - a client that opens `subscriptions/listen` on the active-timer resource
 //!   hears every step change and reads what happened;
 //! - every run reaches the workspace's logs through the app server;
@@ -27,26 +27,31 @@ use rmcp::transport::{
 };
 use sapphire_framework::backend::protocol as proto;
 use sapphire_framework::ipc::{self, ClientInfo, Endpoint};
-use sapphire_framework::keys::{AuthConfig, Authenticated, Verdict, Verifier};
+use sapphire_framework::keys::{
+    Access, AuthConfig, Authenticated, KeyId, ProfileId, Verdict, Verifier,
+};
 use sapphire_framework::server::{HttpConfig, HttpMcpConfig, ServerConfig};
 use sapphire_timer_core::{AppKind, TIMER_CTX};
 use sapphire_timer_mcp::ACTIVE_TIMER_URI;
 use serde_json::{Value, json};
 
-/// Two external devices, one token each.
-struct TwoDevices;
+/// Two read-write API keys and a read-only one, one token each.
+struct ThreeKeys;
 
 #[async_trait::async_trait]
-impl Verifier for TwoDevices {
+impl Verifier for ThreeKeys {
     async fn verify(&self, token: &str) -> Verdict {
-        let (id, name) = match token {
-            "token-a" => ("012atva", "device-a"),
-            "token-b" => ("012atvb", "device-b"),
+        let (id, name, profile, access) = match token {
+            "token-a" => ("012atva", "key-a", "read-write", Access::Write),
+            "token-b" => ("012atvb", "key-b", "read-write", Access::Write),
+            "token-r" => ("012atvr", "key-r", "read-only", Access::Read),
             _ => return Verdict::Refused,
         };
         Verdict::Accepted(Authenticated {
-            id: id.parse().unwrap(),
+            id: KeyId::new(id).unwrap(),
             name: name.into(),
+            profile: ProfileId::new(profile).unwrap(),
+            access,
         })
     }
 }
@@ -188,7 +193,7 @@ async fn each_client_hears_its_own_timer_and_every_run_is_logged() {
             },
             ..Default::default()
         })
-        .http_auth(AuthConfig::new(Arc::new(TwoDevices)))
+        .http_auth(AuthConfig::new(Arc::new(ThreeKeys)))
         .endpoint(endpoint.clone());
     let task = tokio::spawn(async move { server.run().await.unwrap() });
     wait_until_listening(&endpoint).await;
@@ -241,6 +246,21 @@ async fn each_client_hears_its_own_timer_and_every_run_is_logged() {
     let b_status = call(&b, "timer_status", json!({})).await.unwrap();
     assert!(b_status.get("run").is_none(), "{b_status}");
 
+    // A read-only key reads (`readOnlyHint`) but cannot start a timer.
+    let r = http_client(addr, "token-r").await;
+    let r_status = call(&r, "timer_status", json!({})).await.unwrap();
+    assert!(r_status.get("run").is_none(), "{r_status}");
+    let refused = r
+        .call_tool(
+            CallToolRequestParams::new("timer_start_preset".to_owned())
+                .with_arguments(json!({"preset": "quick"}).as_object().cloned().unwrap()),
+        )
+        .await;
+    assert!(
+        refused.is_err(),
+        "a read-only key started a timer: {refused:?}"
+    );
+
     let kinds = follow_to_the_end(&a, &mut a_updates).await;
     assert_eq!(
         kinds,
@@ -276,7 +296,7 @@ async fn each_client_hears_its_own_timer_and_every_run_is_logged() {
         );
         tokio::time::sleep(Duration::from_millis(50)).await;
     };
-    assert_eq!(log["client"], "device-a");
+    assert_eq!(log["client"], "key-a");
     assert_eq!(log["preset"], "Quick");
     assert_eq!(log["steps"].as_array().unwrap().len(), 4);
     // A Markdown file with front matter, the comment its body.
@@ -340,7 +360,7 @@ async fn each_client_hears_its_own_timer_and_every_run_is_logged() {
         .iter()
         .filter_map(|l| l["client"].as_str())
         .collect();
-    assert!(clients.contains(&"device-a"), "{logs}");
+    assert!(clients.contains(&"key-a"), "{logs}");
 
     drop(local_updates);
     let _ = local.cancel().await;

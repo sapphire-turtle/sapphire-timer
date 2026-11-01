@@ -7,9 +7,9 @@
 //!   one timer here is that client's.
 //! - On **HTTP** (`/mcp` on the app server) there is no session to tell
 //!   clients apart — the 2026-07-28 protocol is stateless — but every request
-//!   carries the external device's bearer token, and the framework's auth
-//!   layer leaves the device it belongs to in the request. Each external
-//!   device gets a timer of its own on the server.
+//!   carries an API key's bearer token, and the framework's auth layer leaves
+//!   the key it belongs to in the request. Each API key gets a timer of its
+//!   own on the server.
 //!
 //! Nothing here is persisted. A timer's runs reach the workspace as logs,
 //! written through the app server like any other change.
@@ -30,9 +30,9 @@ use crate::methods::{LogPutParams, names};
 pub enum ClientKey {
     /// The stdio client: the one process this one serves.
     Local,
-    /// An external device, by its id in the workgroup's ledger.
-    Device(String),
-    /// An HTTP request that no device was authenticated for — only a server
+    /// An API key, by its id in the workspace's keys.
+    ApiKey(String),
+    /// An HTTP request that no key was authenticated for — only a server
     /// that turned auth off for its tests serves one.
     Anonymous,
 }
@@ -59,7 +59,7 @@ impl Client {
         };
         match parts.extensions.get::<Authenticated>() {
             Some(who) => Client {
-                key: ClientKey::Device(who.id.to_string()),
+                key: ClientKey::ApiKey(who.id.to_string()),
                 name: who.name.clone(),
             },
             None => Client {
@@ -131,6 +131,7 @@ fn journal(ctx: ToolContext) -> sapphire_timer_core::engine::Journal {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use sapphire_framework::keys::{Access, KeyId, ProfileId};
 
     #[test]
     fn a_stdio_request_is_the_local_client() {
@@ -139,16 +140,18 @@ mod tests {
     }
 
     #[test]
-    fn an_http_request_is_its_external_device() {
+    fn an_http_request_is_its_api_key() {
         let (mut parts, ()) = http::Request::new(()).into_parts();
         parts.extensions.insert(Authenticated {
-            id: "012atvw".parse().unwrap(),
+            id: KeyId::new("012atvw").unwrap(),
             name: "agent".into(),
+            profile: ProfileId::new("read-write").unwrap(),
+            access: Access::Write,
         });
         let mut extensions = Extensions::new();
         extensions.insert(parts);
         let client = Client::of(&extensions);
-        assert_eq!(client.key, ClientKey::Device("012atvw".into()));
+        assert_eq!(client.key, ClientKey::ApiKey("012atvw".into()));
         assert_eq!(client.name, "agent");
 
         let (bare, ()) = http::Request::new(()).into_parts();

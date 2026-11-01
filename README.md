@@ -29,7 +29,7 @@ One task, no context switching.
 
 - **Timers** are not persisted and not synced. Each client has exactly one, seen by no one else:
   - over stdio (`sapphire-timer mcp`), the process that launched the subcommand;
-  - over HTTP (`/mcp` on the app server), each external device, identified by its bearer token.
+  - over HTTP (`/mcp` on the app server), each API key, identified by its bearer token.
 
 > **Works with any MCP client.** AI integration is a standard MCP server, so sapphire-timer is not tied to [sapphire-agent](https://github.com/sapphire-turtle/sapphire-agent) despite the shared name — any AI harness that can act as an MCP client (Claude Code, Claude Desktop, …) can use it.
 
@@ -107,10 +107,15 @@ sapphire-timer mcp                    # MCP on stdio, for an agent to launch
 ```
 
 The desktop app (`desktop/`) runs the same commands, and run bare it opens a window onto
-the same server: the framework's Settings (workspace, sync, workgroup) and the Timers screen.
+the same server: the framework's Settings (workspace, API keys, and a link to the Sapphire Bridge window for
+the workgroup) and the Timers screen.
 
 `/mcp` over HTTP is off unless the config directory's `config.toml` says `[http.mcp] enabled = true`
 (`sapphire-timer config set http.mcp.enabled=true --restart`); it listens on `127.0.0.1:3175` by default.
+HTTP clients present an API key: `sapphire-timer api-key add <name> --profile read-write` (a
+`read-only` key may call only the reading tools, such as `timer_status` and `log_list`, so it
+cannot start a timer). The workgroup, its devices and embedding are `sapphire-bridge`'s
+(`sapphire-bridge workgroup|device|embedding`).
 A `server.toml` from an older version is moved into `config.toml` on the first start.
 
 ## Repository layout
