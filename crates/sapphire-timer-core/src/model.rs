@@ -121,7 +121,7 @@ pub struct LogEntry {
     pub preset: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub preset_id: Option<GrainId>,
-    /// Who ran it: "local" for a process of its own, or an external device's
+    /// Who ran it: "local" for a process of its own, or an API key's
     /// name.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub client: Option<String>,

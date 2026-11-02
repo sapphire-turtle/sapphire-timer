@@ -434,4 +434,32 @@ mod tests {
         );
         assert_eq!(names.len(), 12 + 7, "{names:?}");
     }
+
+    /// A read-only API key may call only the tools marked `readOnlyHint`, so
+    /// every tool that only reads carries it and no tool that writes does.
+    #[test]
+    fn exactly_the_reading_tools_are_marked_read_only() {
+        let mut read_only: Vec<String> = tools()
+            .iter()
+            .filter(|t| t.annotations.as_ref().and_then(|a| a.read_only_hint) == Some(true))
+            .map(|t| t.name.to_string())
+            .collect();
+        read_only.sort();
+        let mut expected = vec![
+            "timer_status",
+            "preset_get",
+            "preset_list",
+            "log_get",
+            "log_list",
+            "status",
+            "workspace_show",
+            "workspace_search",
+            "workspace_read_file",
+            "workspace_list_dir",
+            "workgroup_show",
+            "device_list",
+        ];
+        expected.sort();
+        assert_eq!(read_only, expected);
+    }
 }

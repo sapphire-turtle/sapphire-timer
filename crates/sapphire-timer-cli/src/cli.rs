@@ -24,7 +24,7 @@ pub struct Cli {
 #[derive(Subcommand)]
 pub enum Command {
     /// The framework's verbs: serve, status, service, update, workspace,
-    /// workgroup, device, embedding, external-device, config, mcp.
+    /// api-key, config, mcp.
     #[command(flatten)]
     Framework(FrameworkCommand),
 }

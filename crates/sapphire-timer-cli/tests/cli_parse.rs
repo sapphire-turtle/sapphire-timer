@@ -37,8 +37,7 @@ fn the_framework_verbs_sit_at_the_top_level() {
         &["workspace", "sync", "enable"],
         &["workspace", "sync", "disable"],
         &["workspace", "sync", "status"],
-        &["workgroup", "list"],
-        &["device", "list"],
+        &["api-key", "list"],
         &["external-device", "list"],
         &["mcp"],
     ] {

@@ -14,7 +14,7 @@
 //!   its MCP tools call. The framework serves those tools on stdio
 //!   (`sapphire-timer mcp`) and, when `config.toml` turns it on
 //!   (`[http.mcp] enabled`), at `/mcp` on the server's HTTP listener — where
-//!   each external device also gets a running timer of its own
+//!   each API key also gets a running timer of its own
 //!   (`sapphire_timer_mcp::clients`).
 
 use std::io;
