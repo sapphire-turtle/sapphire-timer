@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0](https://github.com/sapphire-turtle/sapphire-timer/compare/sapphire-timer-mcp-v0.1.0...sapphire-timer-mcp-v0.2.0) - 2026-11-03
+
+### Changed
+
+- **Breaking:** sapphire-framework 0.26
+
 ## [0.1.0](https://github.com/sapphire-turtle/sapphire-timer/releases/tag/sapphire-timer-mcp-v0.1.0) - 2026-10-25
 
 ### Added

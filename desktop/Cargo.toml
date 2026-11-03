@@ -37,8 +37,8 @@ sapphire-framework = { workspace = true, features = ["eframe", "ipc", "server"] 
 corundum-framework-platform = "0.8.0"
 # The record types the server's answers deserialize into, and the methods'
 # parameters and names. No store: the window reads nothing from disk.
-sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.1.0", default-features = false }
-sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.1.0", default-features = false }
+sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.2.0", default-features = false }
+sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.2.0", default-features = false }
 anyhow.workspace = true
 chrono.workspace = true
 clap.workspace = true
