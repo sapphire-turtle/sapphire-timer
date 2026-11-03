@@ -11,13 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- *(desktop)* [**breaking**] package with cargo-packager instead of Velopack ([#34](https://github.com/sapphire-turtle/sapphire-timer/pull/34))
-- [**breaking**] one desktop binary that runs the CLI too; headless, cli and server crates
+- **Breaking:** one desktop binary that runs the CLI too; headless, cli and server crates
+
+### Changed
+
+- **Breaking:** sapphire-framework 0.26
 
 ### Fixed
 
 - name each edition's releases, so update installs its own file
-
-### Other
-
-- *(deps)* [**breaking**] sapphire-framework 0.24
