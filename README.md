@@ -50,8 +50,8 @@ when the one on PATH is not the one you ran.
 ### Desktop app: installer
 
 Download the installer for your platform from the [latest release](https://github.com/sapphire-turtle/sapphire-timer/releases/latest):
-`sapphire-timer-desktop-win-Setup.exe` (Windows), `sapphire-timer-desktop-osx-Setup.pkg` (macOS) or
-`sapphire-timer-desktop.AppImage` (Linux). It puts `sapphire-timer` on your `PATH` and keeps itself up to
+`sapphire-timer-desktop_<version>_x64-setup.exe` (Windows), `sapphire-timer-desktop_<version>_aarch64.dmg` (macOS) or
+`sapphire-timer-desktop_<version>_x86_64.AppImage` (Linux). It puts `sapphire-timer` on your `PATH` and keeps itself up to
 date; its first start asks to keep the app server running in the background, for the MCP
 server and HTTP clients while the window is closed. Sync goes through Sapphire Bridge,
 which has an installer of its own on
@@ -112,7 +112,8 @@ rmcp's plain `serve` uses the legacy `initialize` handshake, and legacy sessions
 
 ```sh
 sapphire-timer serve                  # the app server (usually via `sapphire-timer service install`)
-sapphire-timer workspace init <dir>   # pick the workspace that holds presets and logs
+sapphire-timer workspace init [dir]   # pick the workspace that holds presets and logs
+                                      # (default: <data dir>/workspaces/default)
 sapphire-timer mcp                    # MCP on stdio, for an agent to launch
 ```
 

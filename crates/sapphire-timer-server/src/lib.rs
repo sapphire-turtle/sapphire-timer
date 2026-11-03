@@ -90,7 +90,7 @@ fn current_timers(host: &WorkspaceHost) -> io::Result<Timers> {
     let root = host.root().ok_or_else(|| {
         io::Error::other(
             "this server has no workspace selected; run \
-             `sapphire-timer workspace init <dir>` or `sapphire-timer workspace select <dir>`",
+             `sapphire-timer workspace init [dir]` or `sapphire-timer workspace select [dir]`",
         )
     })?;
     Timers::open(root).map_err(io::Error::other)

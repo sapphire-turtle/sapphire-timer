@@ -1,13 +1,15 @@
-//! Sapphire Timer as a Velopack package (#25), on the framework's `gui::package`:
+//! Sapphire Timer as a cargo-packager package (#25), on the framework's `gui::package`:
 //! [`PACKAGE`] is what `main` hands to `package::start`, its one service is the app server's
 //! `serve`, and its command goes on `PATH` as `sapphire-timer`.
 
 use sapphire_framework::gui::package::runtime::{CliSpec, PackageSpec, Services};
-use sapphire_framework::gui::package::{AppPackage, ServiceSpec};
+use sapphire_framework::gui::package::{AppPackage, ServiceSpec, UPDATE_PUBKEY};
 
 /// The package: its command, and the app server's service, which an update stops and starts.
 pub static PACKAGE: PackageSpec = PackageSpec {
     app_name: "sapphire-timer",
+    version: env!("CARGO_PKG_VERSION"),
+    update_pubkey: UPDATE_PUBKEY,
     on_installed: None,
     on_uninstalling: None,
     before_apply: None,

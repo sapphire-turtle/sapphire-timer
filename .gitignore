@@ -21,3 +21,6 @@ target
 
 # git worktrees
 .worktrees/
+
+# The desktop app's icons, rendered for its package (release-packager.yml).
+/desktop/icons/
