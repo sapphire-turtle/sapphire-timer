@@ -2,7 +2,7 @@
 name = "sapphire-timer-cli"
 # Released together with the two editions that run it, `sapphire-timer-headless`
 # and `sapphire-timer-desktop` (release-plz.toml).
-version = "0.2.0"
+version = "0.2.1"
 edition.workspace = true
 description = "The command line of sapphire-timer's two editions, the headless one and the desktop app: the framework's commands, which run the app server or call it"
 license.workspace = true
@@ -19,8 +19,8 @@ redb-store = [
 ]
 
 [dependencies]
-sapphire-timer-core = { path = "../sapphire-timer-core", version = "0.2.0", default-features = false }
-sapphire-timer-server = { path = "../sapphire-timer-server", version = "0.2.0", default-features = false }
+sapphire-timer-core = { path = "../sapphire-timer-core", version = "0.2.1", default-features = false }
+sapphire-timer-server = { path = "../sapphire-timer-server", version = "0.2.1", default-features = false }
 sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp"] }
 anyhow.workspace = true
 clap.workspace = true
