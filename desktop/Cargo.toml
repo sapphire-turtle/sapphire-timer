@@ -34,7 +34,7 @@ sapphire-timer-cli = { path = "../crates/sapphire-timer-cli", version = "0.2.0" 
 sapphire-framework = { workspace = true, features = ["eframe", "ipc", "server"] }
 # The window's icon and app-menu entry (`LauncherSpec`'s icon), and whether this runs in a
 # package; the framework's version of it.
-corundum-framework-platform = "0.8.0"
+corundum-framework-platform = "0.9.1"
 # The record types the server's answers deserialize into, and the methods'
 # parameters and names. No store: the window reads nothing from disk.
 sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.2.0", default-features = false }
