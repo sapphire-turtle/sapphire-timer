@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- *(deps)* sapphire-framework 0.27.1 and corundum 0.9.1 (Windows service install) ([#35](https://github.com/sapphire-turtle/sapphire-timer/pull/35))
+- On Windows, keeping the app server running (the first start's offer, or `service install`) no longer fails with "access is denied": the service is now a logon task for the installing user, which needs no administrator (sapphire-framework 0.27, corundum 0.9, sapphire-turtle/corundum-framework#105).
+- On Windows, applying an update from the app's window installs it and starts the app again; before, the app only closed and was not updated (sapphire-framework 0.27.1, corundum 0.9.1, sapphire-turtle/corundum-framework#109). An app at v0.2.0 or earlier still hits this when it applies this update: install v0.2.1 by hand once, from its `_x64-setup.exe` ([#35](https://github.com/sapphire-turtle/sapphire-timer/pull/35))
 
 ## [0.2.0](https://github.com/sapphire-turtle/sapphire-timer/compare/v0.1.0...v0.2.0) - 2026-11-03
 
