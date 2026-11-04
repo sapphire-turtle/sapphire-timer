@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1](https://github.com/sapphire-turtle/sapphire-timer/compare/v0.2.0...v0.2.1) - 2026-11-04
+
+### Fixed
+
+- *(deps)* sapphire-framework 0.27.1 and corundum 0.9.1 (Windows service install) ([#35](https://github.com/sapphire-turtle/sapphire-timer/pull/35))
+
 ## [0.2.0](https://github.com/sapphire-turtle/sapphire-timer/compare/v0.1.0...v0.2.0) - 2026-11-03
 
 ### Added

@@ -1,7 +1,7 @@
 [package]
 name = "sapphire-timer-server"
 # Released together with the editions that run it (release-plz.toml).
-version = "0.2.0"
+version = "0.2.1"
 edition.workspace = true
 description = "sapphire-timer's app server: the one process that reads and writes the presets and logs, with its sync and MCP methods"
 license.workspace = true
@@ -17,8 +17,8 @@ redb-store = [
 ]
 
 [dependencies]
-sapphire-timer-core = { path = "../sapphire-timer-core", version = "0.2.0", default-features = false }
-sapphire-timer-mcp = { path = "../sapphire-timer-mcp", version = "0.2.0", default-features = false }
+sapphire-timer-core = { path = "../sapphire-timer-core", version = "0.2.1", default-features = false }
+sapphire-timer-mcp = { path = "../sapphire-timer-mcp", version = "0.2.1", default-features = false }
 sapphire-framework = { workspace = true, features = ["server", "ipc", "mcp"] }
 anyhow.workspace = true
 toml.workspace = true
