@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0](https://github.com/sapphire-turtle/sapphire-timer/compare/sapphire-timer-cli-v0.2.1...sapphire-timer-cli-v0.3.0) - 2026-11-06
 
-### Other
+### Changed
 
-- update Cargo.toml dependencies
+- sapphire-framework 0.28 (sapphire-turtle/sapphire-framework#402).
 
 ## [0.2.1](https://github.com/sapphire-turtle/sapphire-timer/compare/sapphire-timer-cli-v0.2.0...sapphire-timer-cli-v0.2.1) - 2026-11-04
 
