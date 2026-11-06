@@ -24,7 +24,11 @@ jobs:
     permissions:
       contents: write
     uses: sapphire-turtle/.github/.github/workflows/release-binary.yml@v1
+    # The signing key: each file with its `<file>.sig`, which `update` checks
+    # (sapphire-turtle/sapphire-framework#402).
+    secrets: inherit
     with:
+      sign: true
       tag: ${{ inputs.tag }}
       package: sapphire-timer-headless
       binary: sapphire-timer
@@ -36,7 +40,11 @@ jobs:
     permissions:
       contents: write
     uses: sapphire-turtle/.github/.github/workflows/release-binary.yml@v1
+    # The signing key: each file with its `<file>.sig`, which `update` checks
+    # (sapphire-turtle/sapphire-framework#402).
+    secrets: inherit
     with:
+      sign: true
       tag: ${{ inputs.tag }}
       package: sapphire-timer-desktop
       binary: sapphire-timer-desktop
