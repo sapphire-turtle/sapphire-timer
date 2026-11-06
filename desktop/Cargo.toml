@@ -2,7 +2,7 @@
 name = "sapphire-timer-desktop"
 # Released together with `sapphire-timer-headless`, under its `v{version}`
 # tags (release-plz.toml).
-version = "0.2.1"
+version = "0.3.0"
 edition.workspace = true
 description = "Desktop GUI for sapphire-timer"
 license-file = "LICENSE"
@@ -28,7 +28,7 @@ package = ["sapphire-framework/package"]
 [dependencies]
 # Every command but the window — `serve`, `mcp`, `status`, … — runs the CLI's
 # own code, so this one binary does all the CLI does.
-sapphire-timer-cli = { path = "../crates/sapphire-timer-cli", version = "0.2.1" }
+sapphire-timer-cli = { path = "../crates/sapphire-timer-cli", version = "0.3.0" }
 # `eframe`: `gui::app::run` starts the window, and `gui::{eframe, egui}` are the
 # versions it renders with.
 sapphire-framework = { workspace = true, features = ["eframe", "ipc", "server"] }
@@ -37,8 +37,8 @@ sapphire-framework = { workspace = true, features = ["eframe", "ipc", "server"] 
 corundum-framework-platform = "0.11.0"
 # The record types the server's answers deserialize into, and the methods'
 # parameters and names. No store: the window reads nothing from disk.
-sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.2.1", default-features = false }
-sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.2.1", default-features = false }
+sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.2.2", default-features = false }
+sapphire-timer-mcp = { path = "../crates/sapphire-timer-mcp", version = "0.2.2", default-features = false }
 anyhow.workspace = true
 chrono.workspace = true
 clap.workspace = true
