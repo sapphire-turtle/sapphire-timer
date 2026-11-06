@@ -47,6 +47,8 @@ const LAUNCHER: LauncherSpec = LauncherSpec {
     description: "Preset timers with time logs",
     category: "Utility",
     icon_svg: include_bytes!("../../docs/icon.svg"),
+    // The mark on the brand's tile, on the macOS icon grid, as the package's icns.
+    macos_icon_svg: Some(include_bytes!("../../docs/icon-macos.svg")),
     bundle_prefix: "org.sapphire-turtle",
 };
 
