@@ -34,7 +34,7 @@ sapphire-timer-cli = { path = "../crates/sapphire-timer-cli", version = "0.2.1" 
 sapphire-framework = { workspace = true, features = ["eframe", "ipc", "server"] }
 # The window's icon and app-menu entry (`LauncherSpec`'s icon), and whether this runs in a
 # package; the framework's version of it.
-corundum-framework-platform = "0.9.1"
+corundum-framework-platform = "0.11.0"
 # The record types the server's answers deserialize into, and the methods'
 # parameters and names. No store: the window reads nothing from disk.
 sapphire-timer-core = { path = "../crates/sapphire-timer-core", version = "0.2.1", default-features = false }
@@ -55,7 +55,7 @@ tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time"] }
 
 [build-dependencies]
 # The app icon in the Windows executable (`build.rs`).
-corundum-framework-build = "0.9.1"
+corundum-framework-build = "0.11.0"
 
 # The package (sapphire-turtle/.github's release-packager.yml, corundum-framework#103): the
 # window's binary, built with the `package` feature; the release workflow adds the Windows
