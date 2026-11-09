@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1](https://github.com/sapphire-turtle/sapphire-timer/compare/v0.3.0...v0.3.1) - 2026-11-09
+
+### Added
+
+- *(install)* install the CLI with this repository's script, checking its signature
+
 ## [0.3.0](https://github.com/sapphire-turtle/sapphire-timer/compare/v0.2.1...v0.3.0) - 2026-11-06
 
 ### Changed

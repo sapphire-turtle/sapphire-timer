@@ -2,7 +2,7 @@
 name = "sapphire-timer-desktop"
 # Released together with `sapphire-timer-headless`, under its `v{version}`
 # tags (release-plz.toml).
-version = "0.3.0"
+version = "0.3.1"
 edition.workspace = true
 description = "Desktop GUI for sapphire-timer"
 license-file = "LICENSE"
@@ -28,7 +28,7 @@ package = ["sapphire-framework/package"]
 [dependencies]
 # Every command but the window — `serve`, `mcp`, `status`, … — runs the CLI's
 # own code, so this one binary does all the CLI does.
-sapphire-timer-cli = { path = "../crates/sapphire-timer-cli", version = "0.3.0" }
+sapphire-timer-cli = { path = "../crates/sapphire-timer-cli", version = "0.3.1" }
 # `eframe`: `gui::app::run` starts the window, and `gui::{eframe, egui}` are the
 # versions it renders with.
 sapphire-framework = { workspace = true, features = ["eframe", "ipc", "server"] }
