@@ -20,8 +20,8 @@
 
 use std::path::{Path, PathBuf};
 
-use chrono::{DateTime, FixedOffset};
 use grain_id::GrainId;
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 use crate::error::{Error, Result};
@@ -64,9 +64,11 @@ struct LogFront {
     preset_id: Option<GrainId>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     client: Option<String>,
-    started_at: DateTime<FixedOffset>,
+    #[serde(with = "crate::time::rfc3339")]
+    started_at: Timestamp,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    ended_at: Option<DateTime<FixedOffset>>,
+    #[serde(with = "crate::time::rfc3339::option")]
+    ended_at: Option<Timestamp>,
     outcome: Outcome,
     #[serde(default = "one")]
     cycles: u32,
@@ -203,8 +205,8 @@ pub fn normalize_text(text: &str) -> Option<String> {
 mod tests {
     use super::*;
 
-    fn ts(s: &str) -> DateTime<FixedOffset> {
-        DateTime::parse_from_rfc3339(s).unwrap()
+    fn ts(s: &str) -> Timestamp {
+        s.parse().unwrap()
     }
 
     #[test]

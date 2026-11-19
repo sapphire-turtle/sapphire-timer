@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Breaking
+
+- Times are `jiff::Timestamp`, not chrono's `DateTime<FixedOffset>`: chrono is unmaintained (RUSTSEC-2026-0543). `LogEntry`, `StepLog`, `Run` and `Event` change type; `time` has the helpers (`now`, `local`, `local_date`, `parse`, `format`).
+
+### Changed
+
+- Logs are written as before, in this host's offset (`2026-10-28T09:00:00+09:00`), and releases on chrono still read them. A time without an offset is read in this host's time zone, where it made the log unreadable before.
+- `Timers::list_logs` takes a run's date in this host's time zone, not in the offset it was recorded in.
+- sapphire-framework 0.29, corundum-framework 0.13.
+
 ## [0.2.2](https://github.com/sapphire-turtle/sapphire-timer/compare/sapphire-timer-core-v0.2.1...sapphire-timer-core-v0.2.2) - 2026-11-06
 
 ### Changed

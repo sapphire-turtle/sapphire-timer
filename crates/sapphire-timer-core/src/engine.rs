@@ -14,8 +14,10 @@
 use std::sync::{Arc, Mutex, Weak};
 use std::time::Duration;
 
-use chrono::{DateTime, FixedOffset, Local};
+use jiff::SignedDuration;
+
 use grain_id::GrainId;
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 use tokio::sync::watch;
 use tokio::task::JoinHandle;
@@ -92,7 +94,9 @@ pub struct Run {
     pub label: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub preset: Option<String>,
-    pub started_at: DateTime<FixedOffset>,
+    #[serde(with = "crate::time::rfc3339")]
+    #[schemars(with = "String")]
+    pub started_at: Timestamp,
     /// 1-based.
     pub cycle: u32,
     pub total_cycles: u32,
@@ -100,8 +104,12 @@ pub struct Run {
     pub step_index: usize,
     pub total_steps: usize,
     pub step: Step,
-    pub step_started_at: DateTime<FixedOffset>,
-    pub step_ends_at: DateTime<FixedOffset>,
+    #[serde(with = "crate::time::rfc3339")]
+    #[schemars(with = "String")]
+    pub step_started_at: Timestamp,
+    #[serde(with = "crate::time::rfc3339")]
+    #[schemars(with = "String")]
+    pub step_ends_at: Timestamp,
     /// The step after this one; `None` on the last.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub next_step: Option<String>,
@@ -130,7 +138,9 @@ pub struct Event {
     pub kind: EventKind,
     pub run_id: GrainId,
     pub label: String,
-    pub at: DateTime<FixedOffset>,
+    #[serde(with = "crate::time::rfc3339")]
+    #[schemars(with = "String")]
+    pub at: Timestamp,
     /// The step that just ended, on `StepChanged` and `Finished`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub ended_step: Option<String>,
@@ -174,7 +184,7 @@ struct Active {
     log: LogEntry,
     cycle: u32,
     step: usize,
-    step_started_at: DateTime<FixedOffset>,
+    step_started_at: Timestamp,
     deadline: Instant,
     task: JoinHandle<()>,
 }
@@ -191,7 +201,7 @@ impl Active {
             total_cycles: self.plan.cycles,
             step_index: self.step,
             total_steps: self.plan.steps.len(),
-            step_ends_at: self.step_started_at + to_chrono(step.minutes),
+            step_ends_at: self.step_started_at + to_duration(step.minutes),
             step,
             step_started_at: self.step_started_at,
             next_step: self.next().map(|(_, i)| self.plan.steps[i].label.clone()),
@@ -210,7 +220,7 @@ impl Active {
     }
 
     /// Close the running step's log at `at`.
-    fn end_step(&mut self, at: DateTime<FixedOffset>, completed: bool) {
+    fn end_step(&mut self, at: Timestamp, completed: bool) {
         if let Some(step) = self.log.steps.last_mut() {
             step.ended_at = Some(at);
             step.completed = completed;
@@ -357,7 +367,7 @@ impl Timer {
         &self,
         inner: &mut Inner,
         mut active: Active,
-        at: DateTime<FixedOffset>,
+        at: Timestamp,
         outcome: Outcome,
         kind: EventKind,
     ) {
@@ -385,7 +395,7 @@ impl Timer {
         inner: &mut Inner,
         kind: EventKind,
         run: &Run,
-        at: DateTime<FixedOffset>,
+        at: Timestamp,
         ended_step: Option<String>,
         step: Option<String>,
     ) {
@@ -445,7 +455,7 @@ async fn drive(timer: Weak<Timer>, run_id: GrainId) {
     }
 }
 
-fn step_log(step: &Step, cycle: u32, at: DateTime<FixedOffset>) -> StepLog {
+fn step_log(step: &Step, cycle: u32, at: Timestamp) -> StepLog {
     StepLog {
         label: step.label.clone(),
         minutes: step.minutes,
@@ -456,8 +466,8 @@ fn step_log(step: &Step, cycle: u32, at: DateTime<FixedOffset>) -> StepLog {
     }
 }
 
-fn now() -> DateTime<FixedOffset> {
-    Local::now().fixed_offset()
+fn now() -> Timestamp {
+    crate::time::now()
 }
 
 /// Validated minutes: positive and at most [`crate::model::MAX_STEP_MINUTES`].
@@ -465,8 +475,8 @@ fn to_std(minutes: f64) -> Duration {
     Duration::from_secs_f64(minutes * 60.0)
 }
 
-fn to_chrono(minutes: f64) -> chrono::Duration {
-    chrono::Duration::from_std(to_std(minutes)).unwrap_or(chrono::Duration::MAX)
+fn to_duration(minutes: f64) -> SignedDuration {
+    SignedDuration::try_from(to_std(minutes)).unwrap_or(SignedDuration::MAX)
 }
 
 #[cfg(test)]

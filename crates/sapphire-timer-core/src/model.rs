@@ -1,5 +1,5 @@
-use chrono::{DateTime, FixedOffset};
 use grain_id::GrainId;
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 use crate::error::{Error, Result};
@@ -100,10 +100,14 @@ pub struct StepLog {
     pub minutes: f64,
     /// 1-based.
     pub cycle: u32,
-    pub started_at: DateTime<FixedOffset>,
+    #[serde(with = "crate::time::rfc3339")]
+    #[schemars(with = "String")]
+    pub started_at: Timestamp,
     /// `None` while it runs.
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub ended_at: Option<DateTime<FixedOffset>>,
+    #[serde(with = "crate::time::rfc3339::option")]
+    #[schemars(with = "Option<String>")]
+    pub ended_at: Option<Timestamp>,
     /// Whether it ran to its end, rather than being cut short.
     pub completed: bool,
 }
@@ -125,9 +129,13 @@ pub struct LogEntry {
     /// name.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub client: Option<String>,
-    pub started_at: DateTime<FixedOffset>,
+    #[serde(with = "crate::time::rfc3339")]
+    #[schemars(with = "String")]
+    pub started_at: Timestamp,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub ended_at: Option<DateTime<FixedOffset>>,
+    #[serde(with = "crate::time::rfc3339::option")]
+    #[schemars(with = "Option<String>")]
+    pub ended_at: Option<Timestamp>,
     pub outcome: Outcome,
     /// The cycles planned.
     pub cycles: u32,

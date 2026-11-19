@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- `log_list`'s `from` and `to` are dates in the server's time zone.
+- sapphire-framework 0.29, corundum-framework 0.13.
+
 ## [0.2.2](https://github.com/sapphire-turtle/sapphire-timer/compare/sapphire-timer-mcp-v0.2.1...sapphire-timer-mcp-v0.2.2) - 2026-11-06
 
 ### Changed

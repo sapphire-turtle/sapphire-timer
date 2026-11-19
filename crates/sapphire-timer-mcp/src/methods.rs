@@ -12,8 +12,8 @@
 
 use std::sync::Arc;
 
-use chrono::NaiveDate;
 use grain_id::GrainId;
+use jiff::civil::Date;
 use sapphire_framework::ipc::{RequestCtx, Router, RpcError};
 use sapphire_timer_core::{LogEntry, PresetUpdate, Step, Timers};
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
@@ -260,9 +260,10 @@ impl TimerMethods {
     }
 }
 
-fn date(raw: Option<&str>, field: &str) -> Result<Option<NaiveDate>, String> {
+fn date(raw: Option<&str>, field: &str) -> Result<Option<Date>, String> {
     raw.map(|s| {
-        NaiveDate::parse_from_str(s.trim(), "%Y-%m-%d")
+        s.trim()
+            .parse::<Date>()
             .map_err(|e| format!("`{field}` must be YYYY-MM-DD, got `{s}`: {e}"))
     })
     .transpose()
