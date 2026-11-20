@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0](https://github.com/sapphire-turtle/sapphire-timer/compare/sapphire-timer-core-v0.2.2...sapphire-timer-core-v0.3.0) - 2026-11-20
+
 ### Breaking
 
 - Times are `jiff::Timestamp`, not chrono's `DateTime<FixedOffset>`: chrono is unmaintained (RUSTSEC-2026-0543). `LogEntry`, `StepLog`, `Run` and `Event` change type; `time` has the helpers (`now`, `local`, `local_date`, `parse`, `format`).
