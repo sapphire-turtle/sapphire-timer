@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0](https://github.com/sapphire-turtle/sapphire-timer/compare/sapphire-timer-mcp-v0.2.2...sapphire-timer-mcp-v0.3.0) - 2026-11-20
+
+### Other
+
+- [**breaking**] times are jiff's, not chrono's (RUSTSEC-2026-0543)
+
 ### Changed
 
 - `log_list`'s `from` and `to` are dates in the server's time zone.
