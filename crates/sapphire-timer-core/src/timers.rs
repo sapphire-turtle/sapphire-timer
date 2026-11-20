@@ -2,8 +2,8 @@
 
 use std::path::{Path, PathBuf};
 
-use chrono::NaiveDate;
 use grain_id::GrainId;
+use jiff::civil::Date;
 
 use crate::error::{Error, Result};
 use crate::model::{LogEntry, Preset, PresetUpdate, Step};
@@ -135,13 +135,9 @@ impl Timers {
     }
 
     /// Logs of runs started between `from` and `to` (inclusive, by the date
-    /// in the run's own offset), oldest first. An unreadable file is skipped
+    /// in this host's time zone), oldest first. An unreadable file is skipped
     /// with a warning.
-    pub fn list_logs(
-        &self,
-        from: Option<NaiveDate>,
-        to: Option<NaiveDate>,
-    ) -> Result<Vec<LogEntry>> {
+    pub fn list_logs(&self, from: Option<Date>, to: Option<Date>) -> Result<Vec<LogEntry>> {
         let mut out = Vec::new();
         for id in record_ids(&self.root.join(store::LOGS_DIR))? {
             let log = match store::read_log(&self.root, id) {
@@ -151,7 +147,7 @@ impl Timers {
                     continue;
                 }
             };
-            let day = log.started_at.date_naive();
+            let day = crate::time::local_date(log.started_at);
             if from.is_some_and(|f| day < f) || to.is_some_and(|t| day > t) {
                 continue;
             }
@@ -267,7 +263,7 @@ mod tests {
             preset: None,
             preset_id: None,
             client: None,
-            started_at: chrono::Local::now().fixed_offset(),
+            started_at: crate::time::now(),
             ended_at: None,
             outcome: crate::Outcome::Running,
             cycles: 1,

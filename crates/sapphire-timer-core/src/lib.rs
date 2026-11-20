@@ -17,6 +17,7 @@ pub mod engine;
 pub mod error;
 pub mod model;
 pub mod store;
+pub mod time;
 pub mod timers;
 
 pub use engine::{Event, EventKind, Plan, Run, State, Timer};

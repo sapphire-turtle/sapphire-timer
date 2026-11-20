@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- A log's start shows in this host's time zone.
+- sapphire-framework 0.29, corundum-framework 0.13.
+
 ## [0.3.0](https://github.com/sapphire-turtle/sapphire-timer/compare/v0.2.1...v0.3.0) - 2026-11-06
 
 ### Added

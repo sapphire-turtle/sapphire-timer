@@ -13,7 +13,7 @@ default = ["redb-store"]
 redb-store = ["sapphire-workspace/redb-store"]
 
 [dependencies]
-chrono.workspace = true
+jiff.workspace = true
 grain-id.workspace = true
 schemars.workspace = true
 sapphire-frontmatter.workspace = true

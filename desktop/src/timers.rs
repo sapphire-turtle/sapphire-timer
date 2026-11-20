@@ -13,7 +13,6 @@ use std::sync::Arc;
 use std::sync::mpsc;
 use std::time::{Duration, Instant};
 
-use chrono::Local;
 use grain_id::GrainId;
 use sapphire_framework::gui::{Side, egui};
 use sapphire_timer_core::{LogEntry, Outcome, Preset};
@@ -182,12 +181,12 @@ impl TimersView {
 
 /// One run: when it started, how it ended, who ran it, and its comment.
 fn log_ui(ui: &mut egui::Ui, log: &LogEntry) {
-    let started = log.started_at.with_timezone(&Local);
+    let started = sapphire_timer_core::time::local(log.started_at);
     ui.horizontal(|ui| {
-        ui.strong(started.format("%Y-%m-%d %H:%M").to_string());
+        ui.strong(started.strftime("%Y-%m-%d %H:%M").to_string());
         ui.label(outcome(log.outcome));
         if let Some(ended) = log.ended_at {
-            let minutes = (ended - log.started_at).num_minutes();
+            let minutes = ended.duration_since(log.started_at).as_mins();
             ui.weak(format!("{minutes} min"));
         }
     });
@@ -263,7 +262,7 @@ mod tests {
             preset: None,
             preset_id: preset.map(|p| p.parse().unwrap()),
             client: None,
-            started_at: chrono::DateTime::parse_from_rfc3339(started).unwrap(),
+            started_at: started.parse().unwrap(),
             ended_at: None,
             outcome: Outcome::Completed,
             cycles: 4,

@@ -179,7 +179,7 @@ mod tests {
             )
             .await
             .unwrap();
-        let started_at = chrono::DateTime::parse_from_rfc3339("2026-10-28T09:00:00+09:00").unwrap();
+        let started_at = "2026-10-28T09:00:00+09:00".parse().unwrap();
         let log = LogEntry {
             id: "012atvw".parse().unwrap(),
             label: "Pomodoro".into(),
